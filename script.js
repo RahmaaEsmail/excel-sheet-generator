@@ -4,22 +4,26 @@ columns = document.getElementsByClassName("columns")[0]
 tableExists = false
 
 const generateTable = () => {
-    let rowsNumber = parseInt(rows.value), columnsNumber = parseInt(columns.value)
+    const rowsNumber = +rows.value;
+    const columnsNumber = +columns.value;
     table.innerHTML = ""
-    for(let i=0; i<rowsNumber; i++){
-        var tableRow = ""
-        for(let j=0; j<columnsNumber; j++){
-            tableRow += `<td contenteditable></td>`
+    for (let i = 1; i <= rowsNumber; i++) {
+        let tableRow = '<tr></tr>'
+        for (let j = 1; j <= columnsNumber; j++) {
+            tableRow += '<td></td>'
         }
         table.innerHTML += tableRow
     }
-    if(rowsNumber>0 && columnsNumber>0){
-        tableExists = true
+    if(rowsNumber > 0 && columnsNumber > 0)
+      tableExists =true
+    else {
+        swal("Oops", " Please enter valid numbers for rows and columns!", 'error')
     }
 }
 
 const ExportToExcel = (type, fn, dl) => {
     if(!tableExists){
+        swal("Oops", " there is no generated table to be exported!", 'error')
         return
     }
     var elt = table
@@ -27,3 +31,5 @@ const ExportToExcel = (type, fn, dl) => {
     return dl ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' })
         : XLSX.writeFile(wb, fn || ('MyNewSheet.' + (type || 'xlsx')))
 }
+
+
